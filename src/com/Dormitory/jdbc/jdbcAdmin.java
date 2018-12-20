@@ -1,9 +1,13 @@
 package com.Dormitory.jdbc;
 
 import com.Dormitory.model.AdminPo;
+import com.Dormitory.model.StudentPo;
+
 import java.lang.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class jdbcAdmin extends jdbcDriver {
     //增加用户
@@ -52,8 +56,8 @@ public class jdbcAdmin extends jdbcDriver {
     //修改用户信息
     public int updateAdmin(String userid,String password,String username,String tele){
 
-        String[] args={tele,password,username,userid};
-        String sql="update admin(password,username,tele) VALUES (MD5(?),?,?) where userid=?;";
+        String[] args={password,username,tele,userid};
+        String sql="update admin set password=MD5(?),username=?,tele=? where userid=?;";
 
         int flag=0;
 
@@ -98,6 +102,38 @@ public class jdbcAdmin extends jdbcDriver {
             this.jdbcConnectionClose();
         }
         return null;
+    }
+
+
+    //查询所有
+    public List<AdminPo> getAdminPo(){
+
+        String sql="select * from admin; ";
+
+        ResultSet rs = null;
+        List<AdminPo> resultList = null;
+        try {
+            rs = this.jdbcExecuteQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            this.jdbcConnectionClose();
+            return resultList;
+        }
+        resultList = new ArrayList<AdminPo>();
+        AdminPo po =null;
+        try {
+            while(rs.next()){
+                po = new AdminPo();
+                po = this.makeAdminPo(rs);
+                resultList.add(po);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            this.jdbcConnectionClose();
+        }
+        return resultList;
     }
 
 

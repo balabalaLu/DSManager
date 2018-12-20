@@ -142,10 +142,11 @@ public class jdbcDriver {
      * executeQuery
      *
      */
-    public void jdbcExecuteQuery(String s) throws SQLException{
+    public ResultSet jdbcExecuteQuery(String s) throws SQLException{
         Connection conn=jdbcConnection();
         statement=connection.createStatement();
         resultset=statement.executeQuery(s);
+        return resultset;
     }
 
 
