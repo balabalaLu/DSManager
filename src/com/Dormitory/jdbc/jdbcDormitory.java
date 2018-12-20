@@ -96,13 +96,13 @@ public class jdbcDormitory  extends jdbcDriver {
         return null;
     }
 
-    //按照楼层查找宿舍的基本信息
-    public List<RoomPo> getRoomPoListByFloor(String floor){
-        String sql = "select * from dorm where floor = ?;";
+    //按照楼层查找宿舍号
+    public List<String> getRnoByFloor(String floor){
+        String sql = "select rno from dorm where floor = ? order by rno desc ;";
         String[] args = {floor};
         ResultSet rs = null;
         RoomPo po = null;
-        List resultList = new ArrayList<StudentPo>();
+        List resultList = new ArrayList<String>();
         try {
             rs = jdbcExecuteQuery(sql,args);
         } catch (SQLException e) {
@@ -112,26 +112,24 @@ public class jdbcDormitory  extends jdbcDriver {
         }
         try {
             while(rs.next()){
-                po = new RoomPo();
-                po = this.makeRoomPo(rs);
-                resultList.add(po);
+                resultList.add(rs.getString("rno"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
             this.jdbcConnectionClose();
         }
-        return null;
+        return resultList;
     }
 
     //通过寝室号查询宿舍的住宿的学生的基本信息
-    public List<String> getRnoByRno(String rno){
+    public List<StudentPo> getStudentPoByRno(String rno){
  //       String[] args = {String.valueOf(rno)};
         String[] args = {rno};
 
         String sql = "select *" +
-                "from student" +
-                "where sno = (select sno from DS where rno = ?)";
+                "from student " +
+                "where sno in (select sno from DS where rno = ?)";
         ResultSet rs = null;
         List<StudentPo> resultList = null;
         try {
