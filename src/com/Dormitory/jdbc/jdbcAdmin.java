@@ -158,7 +158,7 @@ public class jdbcAdmin extends jdbcDriver {
             System.out.println("username字段不存在");
         }
         try {
-            po.setUsername(rs.getString("tele"));
+            po.setTele(rs.getString("tele"));
         } catch (SQLException e) {
             System.out.println("tele字段不存在");
         }
