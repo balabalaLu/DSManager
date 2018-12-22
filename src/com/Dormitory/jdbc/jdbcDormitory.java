@@ -175,32 +175,33 @@ public class jdbcDormitory  extends jdbcDriver {
      * @return DSPo
      * @param rno
      */
-    public DSPo getDSPoByRno(String rno){
+    public List<DSPo> getDSPoListByRno(String rno){
         String sql = "select * from DS where rno = ?;";
 //        String[] args = {String.valueOf(rno)};
         String[] args = {rno};
 
         ResultSet rs = null;
-        DSPo po= null;
+        List<DSPo> resultList = null;
         try {
-            rs = jdbcExecuteQuery(sql,args);
+            rs = this.jdbcExecuteQuery(sql,args);
         } catch (SQLException e) {
             e.printStackTrace();
             this.jdbcConnectionClose();
-            return null;
         }
+        resultList = new ArrayList<DSPo>();
+        DSPo po =null;
         try {
-            if(rs.next()){
+            while(rs.next()){
                 po = this.makeDSPo(rs);
-            }else{
-                return null;
+                resultList.add(po);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally{
+        }
+        finally {
             this.jdbcConnectionClose();
         }
-        return po;
+        return resultList;
     }
     /**
      * <p>描述：通过学号获得DS表</p>
@@ -239,8 +240,8 @@ public class jdbcDormitory  extends jdbcDriver {
      * @return RoomPo的list
      * @param
      */
-    public List<RoomPo> getStudentPoByRno(){
-        String sql = "select * from dorm where emptyBedNum !=bedNum";
+    public List<RoomPo> getEmptyRooms(){
+        String sql = "select * from dorm where emptyBedNum >0";
         ResultSet rs = null;
         List<RoomPo> resultList = null;
         try {
