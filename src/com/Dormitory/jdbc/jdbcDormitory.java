@@ -170,6 +170,39 @@ public class jdbcDormitory  extends jdbcDriver {
         }
         return resultList;
     }
+
+    /**
+    * <p>描述：通过学号获得学生信息</p>
+     * @return StudentPo
+     * @param sno
+     */
+    public StudentPo getStudentPoBySno(String sno){
+        String sql = "select * from student where sno = ?;";
+        String[] args = {sno};
+
+        ResultSet rs = null;
+        StudentPo po= null;
+        try {
+            rs = jdbcExecuteQuery(sql,args);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            this.jdbcConnectionClose();
+            return null;
+        }
+        try {
+            if(rs.next()){
+                po = this.makeStudentPo(rs);
+            }else{
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            this.jdbcConnectionClose();
+        }
+        return po;
+    }
+
     /**
      * <p>描述：通过宿舍号获得DS表</p>
      * @return DSPo
