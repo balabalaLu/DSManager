@@ -4,6 +4,7 @@ import com.Dormitory.jdbc.jdbcAdmin;
 import com.Dormitory.jdbc.jdbcDormitory;
 import com.Dormitory.jdbc.jdbcLogin;
 import com.Dormitory.model.AdminPo;
+import com.Dormitory.model.DSPo;
 import com.Dormitory.model.RoomPo;
 import com.Dormitory.model.StudentPo;
 
@@ -94,6 +95,7 @@ public class test{
 
             //通过寝室号查询宿舍的住宿的学生的基本信息
             System.out.println("===查询学生===");
+            List<DSPo> dsPo=user_op.getDSPoListByRno("409");
             List<StudentPo> studentPo =user_op.getStudentPoByRno("409");
 
 //            String price=roomPo.getPrice();

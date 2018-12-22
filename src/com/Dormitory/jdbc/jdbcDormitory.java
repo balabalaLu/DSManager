@@ -28,17 +28,18 @@ public class jdbcDormitory  extends jdbcDriver {
         String sql2 = "update dorm set emptyBedNum = emptyBedNum-1 where rno = and emptyBedNum>=0? ;";
         int flag=0;
         try {
+            transBegin();
             int flag1 = jdbcExecuteUpdate(sql1,args1);
-            if (flag1 > 0) {
-                int flag2 = jdbcExecuteUpdate(sql2,args2);
-                if((flag1&flag2)>0)
-                    flag=1;
+            int flag2 = jdbcExecuteUpdate(sql2,args2);
+            if((flag1&flag2)>0){
+                flag=1;
+                transCommit();
             }
         } catch (SQLException e) {
             e.printStackTrace();
             flag= 0;
         } finally {
-            this.jdbcConnectionClose();
+            this.closeResource();
             return flag;
         }
 
@@ -58,17 +59,18 @@ public class jdbcDormitory  extends jdbcDriver {
         String sql2 = "update dorm set emptyBedNum = emptyBedNum+1 where rno = ? and emptyBedNum<bedNum;";
         int flag=0;
         try {
-            int flag1 = jdbcExecuteUpdate(sql1, args1);
-            if (flag1> 0) {
-                int flag2 = jdbcExecuteUpdate(sql2,args2);
-                if((flag1&flag2)>0)
-                    flag=1;
+            transBegin();
+            int flag1 = jdbcExecuteUpdate(sql1,args1);
+            int flag2 = jdbcExecuteUpdate(sql2,args2);
+            if((flag1&flag2)>0){
+                flag=1;
+                transCommit();
             }
         } catch (SQLException e) {
             e.printStackTrace();
             flag=0;
         }finally{
-            this.jdbcConnectionClose();
+            this.closeResource();
             return flag;
         }
     }
