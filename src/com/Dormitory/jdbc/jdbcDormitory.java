@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.Dormitory.model.RoomPo;
 import com.Dormitory.model.StudentPo;
+import com.Dormitory.model.DSPo;
 
 public class jdbcDormitory  extends jdbcDriver {
     //增加学生
@@ -121,7 +122,6 @@ public class jdbcDormitory  extends jdbcDriver {
         }
         return resultList;
     }
-
     //通过寝室号查询宿舍的住宿的学生的基本信息
     public List<StudentPo> getStudentPoByRno(String rno){
  //       String[] args = {String.valueOf(rno)};
@@ -153,7 +153,91 @@ public class jdbcDormitory  extends jdbcDriver {
         }
         return resultList;
     }
+    
+    //通过宿舍号获得DS表
+    public DSPo getDSPoByRno(String rno){
+        String sql = "select * from DS where rno = ?;";
+//        String[] args = {String.valueOf(rno)};
+        String[] args = {rno};
 
+        ResultSet rs = null;
+        DSPo po= null;
+        try {
+            rs = jdbcExecuteQuery(sql,args);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            this.jdbcConnectionClose();
+            return null;
+        }
+        try {
+            if(rs.next()){
+                po = this.makeDSPo(rs);
+            }else{
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            this.jdbcConnectionClose();
+        }
+        return po;
+    }
+
+    //通过学号获得DS表
+    public DSPo getDSPoBySno(String sno){
+        String sql = "select * from DS where sno = ?;";
+//        String[] args = {String.valueOf(rno)};
+        String[] args = {sno};
+
+        ResultSet rs = null;
+        DSPo po= null;
+        try {
+            rs = jdbcExecuteQuery(sql,args);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            this.jdbcConnectionClose();
+            return null;
+        }
+        try {
+            if(rs.next()){
+                po = this.makeDSPo(rs);
+            }else{
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            this.jdbcConnectionClose();
+        }
+        return po;
+    }
+
+    //获取有空床位的寝室信息
+    public List<RoomPo> getStudentPoByRno(){
+        String sql = "select * from dorm where emptyBedNum !=bedNum";
+        ResultSet rs = null;
+        List<RoomPo> resultList = null;
+        try {
+            rs = this.jdbcExecuteQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            this.jdbcConnectionClose();
+        }
+        resultList = new ArrayList<RoomPo>();
+        RoomPo po =null;
+        try {
+            while(rs.next()){
+                po = this.makeRoomPo(rs);
+                resultList.add(po);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            this.jdbcConnectionClose();
+        }
+        return resultList;
+    }
     protected RoomPo makeRoomPo(ResultSet rs){
         if (null == rs)
             return null;
@@ -219,6 +303,28 @@ public class jdbcDormitory  extends jdbcDriver {
             po.setDept(rs.getString("dept"));
         } catch (SQLException e) {
             System.out.println("dept字段不存在");
+        }
+        return po;
+    }
+
+    protected DSPo makeDSPo(ResultSet rs){
+        if (null == rs)
+            return null;
+        DSPo po = new DSPo();
+        try {
+            po.setSno(rs.getString("sno"));
+        } catch (SQLException e) {
+            System.out.println("sno字段不存在");
+        }
+        try {
+            po.setRno(rs.getString("rno"));
+        } catch (SQLException e) {
+            System.out.println("rno字段不存在");
+        }
+        try {
+            po.setTime(rs.getString("time"));
+        } catch (SQLException e) {
+            System.out.println("gender字段不存在");
         }
         return po;
     }
