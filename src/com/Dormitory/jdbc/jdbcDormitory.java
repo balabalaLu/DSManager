@@ -25,13 +25,14 @@ public class jdbcDormitory  extends jdbcDriver {
         String[] args1 = {sno,rno,time};
         String sql1 = "insert into DS(sno,rno,time) VALUES(?,?,?);";
         String[] args2 = {rno};
-        String sql2 = "update dorm set emptyBedNum = emptyBedNum-1 where rno = ?;";
+        String sql2 = "update dorm set emptyBedNum = emptyBedNum-1 where rno = and emptyBedNum>=0? ;";
         int flag=0;
         try {
             int flag1 = jdbcExecuteUpdate(sql1,args1);
-            int flag2 = jdbcExecuteUpdate(sql2,args2);
-            if ((flag1&flag2) > 0) {
-                flag=1;
+            if (flag1 > 0) {
+                int flag2 = jdbcExecuteUpdate(sql2,args2);
+                if((flag1&flag2)>0)
+                    flag=1;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,14 +55,14 @@ public class jdbcDormitory  extends jdbcDriver {
         String sql1 = "delete from DS where sno=?";
 //        String[] args2 = {String.valueOf(rno)};
         String[] args2 = {rno};
-        String sql2 = "update dorm set emptyBedNum = emptyBedNum+1 where rno = ?;";
+        String sql2 = "update dorm set emptyBedNum = emptyBedNum+1 where rno = ? and emptyBedNum<bedNum;";
         int flag=0;
         try {
-
             int flag1 = jdbcExecuteUpdate(sql1, args1);
-            int flag2 = jdbcExecuteUpdate(sql2, args2);
-            if ((flag1&flag2) > 0) {
-                flag=1;
+            if (flag1> 0) {
+                int flag2 = jdbcExecuteUpdate(sql2,args2);
+                if((flag1&flag2)>0)
+                    flag=1;
             }
         } catch (SQLException e) {
             e.printStackTrace();
