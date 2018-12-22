@@ -1,5 +1,10 @@
 package com.Dormitory.model;
-
+/**
+ * <p>描述 ：宿舍学生关系表Po</p>
+ * @author 鲁念
+ * @date  2018-12-22
+ * @version 1.0
+ */
 public class DSPo {
     private String sno;			//寝室号
     private String rno;		//总床位

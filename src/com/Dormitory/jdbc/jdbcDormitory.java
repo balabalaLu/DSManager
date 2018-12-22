@@ -12,15 +12,18 @@ import com.Dormitory.model.DSPo;
 
 public class jdbcDormitory  extends jdbcDriver {
     //增加学生
+    /**
+     * <p>描述：添加学生</p>
+     * @return 添加成功返回1，不成功返回0
+     * @param rno
+     */
     public int addStudent(String sno, String rno) {
         //获得当前的时间转化为字符串类型
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String time = sdf.format(date);
-//        String[] args1 = {String.valueOf(sno),String.valueOf(rno) ,time};
         String[] args1 = {sno,rno,time};
         String sql1 = "insert into DS(sno,rno,time) VALUES(?,?,?);";
-//        String[] args2 = {String.valueOf(rno)};
         String[] args2 = {rno};
         String sql2 = "update dorm set emptyBedNum = emptyBedNum-1 where rno = ?;";
         int flag=0;
@@ -40,7 +43,11 @@ public class jdbcDormitory  extends jdbcDriver {
 
     }
 
-    //删除学生
+    /**
+     * <p>描述：删除学生</p>
+     * @return 删除成功返回1，不成功返回0
+     * @param rno
+     */
     public int deleteStudent(String sno,String rno) {
 //        String[] args1 = {String.valueOf(sno)};
         String[] args1 = {sno};
@@ -60,13 +67,15 @@ public class jdbcDormitory  extends jdbcDriver {
             e.printStackTrace();
             flag=0;
         }finally{
-
             this.jdbcConnectionClose();
             return flag;
         }
     }
-
-    //通过寝室号查询宿舍的基本信息
+    /**
+     * <p>描述：通过寝室号查询宿舍的基本信息</p>
+     * @return RoomPo
+     * @param rno
+     */
     public RoomPo getRoomPoByRno(String rno){
         String sql = "select * from dorm where rno = ?;";
 //        String[] args = {String.valueOf(rno)};
@@ -96,8 +105,11 @@ public class jdbcDormitory  extends jdbcDriver {
         }
         return null;
     }
-
-    //按照楼层查找宿舍号
+    /**
+     * <p>描述：按照楼层查找宿舍号</p>
+     * @return 宿舍号的list
+     * @param floor
+     */
     public List<String> getRnoByFloor(String floor){
         String sql = "select rno from dorm where floor = ? order by rno desc ;";
         String[] args = {floor};
@@ -122,7 +134,11 @@ public class jdbcDormitory  extends jdbcDriver {
         }
         return resultList;
     }
-    //通过寝室号查询宿舍的住宿的学生的基本信息
+    /**
+     * <p>描述：通过寝室号查询宿舍的住宿的学生的基本信息</p>
+     * @return StudentPo的list
+     * @param rno
+     */
     public List<StudentPo> getStudentPoByRno(String rno){
  //       String[] args = {String.valueOf(rno)};
         String[] args = {rno};
@@ -153,8 +169,11 @@ public class jdbcDormitory  extends jdbcDriver {
         }
         return resultList;
     }
-    
-    //通过宿舍号获得DS表
+    /**
+     * <p>描述：通过宿舍号获得DS表</p>
+     * @return DSPo
+     * @param rno
+     */
     public DSPo getDSPoByRno(String rno){
         String sql = "select * from DS where rno = ?;";
 //        String[] args = {String.valueOf(rno)};
@@ -182,8 +201,11 @@ public class jdbcDormitory  extends jdbcDriver {
         }
         return po;
     }
-
-    //通过学号获得DS表
+    /**
+     * <p>描述：通过学号获得DS表</p>
+     * @return DSPo
+     * @param sno
+     */
     public DSPo getDSPoBySno(String sno){
         String sql = "select * from DS where sno = ?;";
 //        String[] args = {String.valueOf(rno)};
@@ -211,8 +233,11 @@ public class jdbcDormitory  extends jdbcDriver {
         }
         return po;
     }
-
-    //获取有空床位的寝室信息
+    /**
+     * <p>描述：获取有空床位的寝室信息</p>
+     * @return RoomPo的list
+     * @param
+     */
     public List<RoomPo> getStudentPoByRno(){
         String sql = "select * from dorm where emptyBedNum !=bedNum";
         ResultSet rs = null;
